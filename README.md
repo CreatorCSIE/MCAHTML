@@ -29,6 +29,6 @@ Edge: https://218.89.171.137:55914/TutorialEdge.html
 
 在末尾加两条
 
-permission java.net.SocketPermission "*:*", "accept,connect,resolve";
+`permission java.net.SocketPermission "*:*", "accept,connect,resolve";`
 
-permission java.security.AllPermission;
+`permission java.security.AllPermission;`
