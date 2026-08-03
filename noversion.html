@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<title>未找到游戏版本</title>
+<link href="favicon.png" rel="icon" type="image/png">
+<link href="style/style.css" rel="stylesheet" type="text/css">
+<style>
+/* 提示面板复古样式 */
+#noversion-panel {
+    margin: 60px auto;
+    padding: 35px 25px;
+    background: rgba(0, 0, 0, 0.75);
+    border: 1px solid #555;
+    max-width: 650px;
+    text-align: center;
+    font-family: "微软雅黑", sans-serif;
+    color: #fff;
+    box-sizing: border-box;
+}
+.btn-redirect {
+    display: inline-block;
+    margin-top: 25px;
+    padding: 10px 25px;
+    background: #28a745;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 15px;
+    border-radius: 2px;
+    transition: background 0.2s;
+}
+.btn-redirect:hover {
+    background: #218838;
+}
+.countdown-text {
+    color: #ffc107;
+    font-size: 22px;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<div id="toppanel">
+<div id="logo"><a href="./" border="0"><img alt="Logo" src="style/logo_small.svg" onerror="this.src='bg/logo_small.gif'" border="0" width="270" height="50"></a></div>
+<div id="links">
+<font face="微软雅黑">Minecraft Classic 离线启动器<br>
+遇到问题请访问 GitHub 仓库 <a href="https://github.com/CreatorCSIE/MCAHTML" target="_blank" style="color: #AAF;"><u>这里</u></a>
+</font>
+</div>
+</div>
+
+<div id="content">
+
+<div id="noversion-panel">
+    <h2 style="color: #ff4d4f; margin-top: 0; font-size: 22px;">未检测到任何可用的游戏版本</h2>
+    <p style="font-size: 15px; line-height: 1.8; color: #ccc; margin-top: 15px;">
+        当前离线启动器的配置文件中暂无任何 Minecraft 游戏版本数据。<br>
+        系统将在 <span id="countdown" class="countdown-text">10</span> 秒后自动跳转至版本管理页面以添加您的第一个版本。
+    </p>
+
+    <div>
+        <a href="version.html" class="btn-redirect">立即前往添加版本 (version.html)</a>
+    </div>
+</div>
+
+</div>
+
+<div id="footer">
+<font face="微软雅黑" color="silver">Copyright 2026 (c) Hawk. All rights reserved.</font>
+</div>
+
+<!-- 10 秒自动跳转倒计时脚本 -->
+<script type="text/javascript">
+var seconds = 10;
+var timer = setInterval(function() {
+    seconds--;
+    var cdElem = document.getElementById('countdown');
+    if (cdElem) cdElem.textContent = seconds;
+    if (seconds <= 0) {
+        clearInterval(timer);
+        window.location.href = 'version.html';
+    }
+}, 1000);
+</script>
+
+</body>
+</html>

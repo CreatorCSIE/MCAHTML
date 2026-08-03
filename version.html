@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<title>Minecraft 版本配置</title>
+<link href="favicon.png" rel="icon" type="image/png">
+<link href="style/style.css" rel="stylesheet" type="text/css">
+
+<!-- 引入独立的模块化 CSS 与 JS -->
+<link href="style/manager.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="js/manager.js"></script>
+</head>
+
+<body>
+
+<div id="toppanel">
+<div id="logo"><a href="./" border="0"><img alt="Logo" src="style/logo_small.svg" onerror="this.src='bg/logo_small.gif'" border="0" width="270" height="50"></a></div>
+<div id="links">
+<font face="微软雅黑">Minecraft 版本配置管理工具<br>
+返回启动器主页请点击 <a href="Minecraft.html" style="color: #AAF;"><u>这里</u></a>
+</font>
+</div>
+</div>
+
+<div id="content">
+
+<h1 align="center">
+<font face="微软雅黑">
+Minecraft Applet 可视化配置管理工具
+</font>
+</h1>
+
+<div id="manager-container">
+    <div class="row-flex">
+        
+        <!-- 左侧：版本属性填写表单 -->
+        <div class="col-form">
+            <div class="form-title">添加 / 编辑版本属性</div>
+            
+            <div class="form-grid">
+                
+                <div class="form-group">
+                    <label for="v_key">版本 Key (唯一标识符)*</label>
+                    <input type="text" id="v_key" class="form-input" placeholder="例: c0.0.22a_05" oninput="autoSuggestPaths()">
+                </div>
+
+                <div class="form-group">
+                    <label for="v_type">阶段类型 (Type)*</label>
+                    <select id="v_type" class="form-select" onchange="onTypePresetChange()">
+                        <option value="classic">Classic (classic)</option>
+                        <option value="classic_mp">Classic (classic_mp)</option>
+                        <option value="indev">Indev (indev)</option>
+                        <option value="infdev">Infdev (infdev)</option>
+                        <option value="alpha">Alpha (alpha)</option>
+                        <option value="beta">Beta (beta)</option>
+                        <option value="release">Release (release)</option>
+                        <option value="isom">Infinite Map Visualizer (isom)</option>
+                    </select>
+                </div>
+
+                <div class="form-group form-group-full">
+                    <label for="v_name">显示名称 (Display Name)</label>
+                    <input type="text" id="v_name" class="form-input" placeholder="例: 0.0.22a_05" oninput="onNameInput()">
+                </div>
+
+                <div class="form-group">
+                    <label for="v_title">Applet 标题 (al_title)</label>
+                    <input type="text" id="v_title" class="form-input" placeholder="例: Minecraft_Classic_0.0.22a_05" oninput="onTitleInput()">
+                </div>
+
+                <div class="form-group">
+                    <label for="v_main_class">主类名 (al_main)*</label>
+                    <input type="text" id="v_main_class" class="form-input" value="com.mojang.minecraft.MinecraftApplet">
+                </div>
+
+                <div class="form-group form-group-full">
+                    <label for="v_jar">JAR 包相对路径 (jar)*</label>
+                    <input type="text" id="v_jar" class="form-input" placeholder="例: bin/classic/c0.0.22a_05.jar" oninput="onJarInput()">
+                </div>
+
+                <div class="form-group">
+                    <label for="v_width">画布宽度 (Width)</label>
+                    <input type="number" id="v_width" class="form-input" value="854">
+                </div>
+
+                <div class="form-group">
+                    <label for="v_height">画布高度 (Height)</label>
+                    <input type="number" id="v_height" class="form-input" value="480">
+                </div>
+
+            </div>
+
+            <!-- 1. Applet 引擎补丁设置区域 -->
+            <div class="section-box">
+                <div class="section-subtitle">Applet 引擎补丁开关 (Engine Flags)</div>
+                <div class="checkbox-grid">
+                    <label class="checkbox-item"><input type="checkbox" id="v_has_15a_patch"> 0.0.15a 联机补丁 (has_15a_patch)<span class="text-note">(仅适用于 0.0.15a 版本)</span></label>
+                    <label class="checkbox-item"><input type="checkbox" id="v_haspaid"> 0.30 免正版验证 (haspaid)</label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="v_dpi_fix"> 高 DPI 修复 (dpi_fix) 
+                        <span class="text-note">(仅适用于 0.0.12a_03 之前的 Classic 版本)</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- 2. 操作指南按键设置区域 (独立划分) -->
+            <div class="section-box">
+                <div class="section-subtitle">按键指南显示设置 (Controls Settings)（可选）</div>
+                <div class="checkbox-grid">
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="v_has_human"> G 键生成小人 (has_human)
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="v_has_set_spawn"> Enter 设出生点 (has_set_spawn)
+                    </label>
+
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="v_has_block_menu"> B 键方块菜单 (has_block_menu)
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="v_has_sneak"> Shift 键潜行 (has_sneak)
+                    </label>
+                    <div class="checkbox-item" style="display: flex; align-items: center;">
+                        <input type="checkbox" id="v_has_inventory" onchange="toggleInventorySelect()" style="margin-right: 6px;">
+                        <span style="margin-right: 6px;">打开物品栏 (inventory_key)</span>
+                        <select id="v_inventory_key" class="form-select" style="width: 70px; padding: 1px 4px; height: 24px; font-size: 12px; line-height: 1;" disabled>
+                            <option value="I">I 键</option>
+                            <option value="E">E 键</option>
+                        </select>
+                    </div>
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="v_has_drop"> Q 键丢弃物品 (has_drop)
+                    </label>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button type="button" class="btn-action btn-add" onclick="addOrUpdateVersion()">写入 / 保存版本</button>
+                <button type="button" class="btn-action btn-clear" onclick="resetForm()">重置表单</button>
+            </div>
+        </div>
+
+        <!-- 右侧：已有版本列表与 JSON 实时输出 -->
+        <div class="col-json">
+            <div class="form-title">已有版本列表 (点击可加载编辑)</div>
+            <div id="versionTagList" class="version-list-box">
+                <span style="color: #666; font-size: 12px;">加载中...</span>
+            </div>
+
+            <div class="form-title" style="margin-top: 15px;">实时 JSON 结果 (config/version.json)</div>
+            <textarea id="jsonOutput" readonly></textarea>
+
+            <div class="btn-group">
+                <button type="button" class="btn-action btn-download" onclick="downloadJSONFile()">下载 version.json 文件</button>
+                <button type="button" class="btn-action btn-copy" onclick="copyJSONToClipboard()">复制完整 JSON</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</div>
+
+<div id="footer">
+<font face="微软雅黑" color="silver">Copyright 2026 (c) Hawk. All rights reserved.</font>
+</div>
+
+</body>
+</html>
