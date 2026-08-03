@@ -69,14 +69,23 @@
 
 ## 🚀 如何启动与使用？
 
-### 1. Windows 系统
+### 1. 获取项目代码 (Download Repository)
+- **途径 A（推荐 Git 命令行克隆）**：
+  ```bash
+  git clone https://github.com/CreatorCSIE/MCAHTML.git
+  cd MCAHTML
+  ```
+- **途径 B（直接下载 ZIP 压缩包）**：
+  点击本仓库右上角的绿色 **`Code`** 按钮 -> 选择 **`Download ZIP`**，下载后解压至本地任意目录；或者前往 [Releases 页面](https://github.com/CreatorCSIE/MCAHTML/releases) 下载官方发布的打包版本。
+
+### 2. Windows 系统
 1. 双击运行项目根目录下的 **`run.bat`**。
 2. 命令行窗口会提示本地服务器已启动。
 3. 打开 Pale Moon 或支持 Java 的浏览器，访问提示中的地址：  
    `http://127.0.0.1:8080/Minecraft.html`
 4. 在页面顶部选择游戏版本与玩家名字，点击 **【启动游戏】** 即可。
 
-### 2. Linux 系统 (Debian / Ubuntu / Mint / Fedora 等)
+### 3. Linux 系统 (Debian / Ubuntu / Mint / Fedora 等)
 1. 在终端赋予脚本执行权限并运行：
    ```bash
    chmod +x run.sh
@@ -84,7 +93,7 @@
    ```
 2. 脚本会自动后台开启离线服务并唤醒 Pale Moon 浏览器访问启动器页面。
 
-### 3. 管理与添加新版本
+### 4. 管理与添加新版本
 - 在浏览器中访问 `http://127.0.0.1:8080/version.html`。
 - 可在图形界面中添加新的 Minecraft 版本、修改主类名或 JAR 包路径，并可通过**鼠标拖拽右上角的版本标签**直接调整版本的展示顺序。
 
