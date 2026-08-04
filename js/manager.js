@@ -282,6 +282,36 @@ function setupFormInputListeners() {
     if (titleInput) titleInput.addEventListener('input', onTitleInput);
 }
 
+// 删除指定版本核心处理逻辑（带确认与表单清空逻辑）
+function deleteSpecificVersion(key) {
+    if (!currentJSON[key]) return;
+    
+    if (confirm('确认要删除版本 "' + key + '" 吗？此操作不可逆。')) {
+        // 如果当前正在编辑此版本，需要先重置表单，避免再次误点击写入
+        var currentFormKey = document.getElementById('v_key').value.trim();
+        if (currentFormKey === key) {
+            resetForm();
+        }
+        
+        delete currentJSON[key];
+        saveConfigData(true); // 使用原有的环境感知保存逻辑
+    }
+}
+
+// 供表单底下的“删除当前版本”按钮调用
+function deleteCurrentVersion() {
+    var key = document.getElementById('v_key').value.trim();
+    if (!key) {
+        alert('请先在右侧列表中选择一个版本加载，或在 Key 输入框内手动输入欲删除的版本 Key！');
+        return;
+    }
+    if (!currentJSON[key]) {
+        alert('配置中不存在 Key 为 "' + key + '" 的版本，无法进行删除。');
+        return;
+    }
+    deleteSpecificVersion(key);
+}
+
 function renderAll() {
     document.getElementById('jsonOutput').value = JSON.stringify(currentJSON, null, 2);
 
@@ -301,12 +331,32 @@ function renderAll() {
         (function(k) {
             var tag = document.createElement('span');
             tag.className = 'version-tag';
-            tag.textContent = k;
             tag.title = '单击编辑 ' + k + ' | 按住可拖拽排序';
             
             tag.setAttribute('draggable', 'true');
             tag.setAttribute('data-key', k);
 
+            // A. 添加文本部分
+            var textSpan = document.createElement('span');
+            textSpan.className = 'tag-text';
+            textSpan.textContent = k;
+            tag.appendChild(textSpan);
+
+            // B. 添加微型删除图标
+            var delSpan = document.createElement('span');
+            delSpan.className = 'tag-del';
+            delSpan.textContent = '×';
+            delSpan.title = '删除此版本';
+            delSpan.setAttribute('draggable', 'false'); // 避免干扰外部标签的拖拽
+
+            // 监听 × 的点击事件并进行阻止冒泡，避免误触发整个 tag 的点击加载事件
+            delSpan.addEventListener('click', function(e) {
+                e.stopPropagation();
+                deleteSpecificVersion(k);
+            });
+            tag.appendChild(delSpan);
+
+            // tag 整体拖拽和加载编辑的逻辑保持不变
             tag.addEventListener('click', function(e) {
                 if (isDragging) {
                     isDragging = false;

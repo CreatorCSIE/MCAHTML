@@ -10,6 +10,50 @@
 <!-- 引入独立的模块化 CSS 与 JS -->
 <link href="style/manager.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="js/manager.js"></script>
+
+<!-- 新增：删除按钮专用样式微调 -->
+<style>
+/* 版本标签中的删除“×”按钮样式 */
+.version-tag {
+    position: relative !important;
+    padding-right: 28px !important; /* 给删除按钮留出安全距离，防止重叠 */
+    display: inline-flex !important;
+    align-items: center;
+}
+.version-tag .tag-text {
+    pointer-events: none; /* 确保点击文字可以穿透 */
+}
+.version-tag .tag-del {
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    line-height: 14px;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.15);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+.version-tag .tag-del:hover {
+    background-color: #d9534f !important; /* 悬浮时变红 */
+    color: #fff !important;
+}
+
+/* 左侧表单中的“删除当前版本”红色按钮样式 */
+.btn-delete {
+    background-color: #d9534f !important;
+    color: white !important;
+}
+.btn-delete:hover {
+    background-color: #c9302c !important;
+}
+</style>
 </head>
 
 <body>
@@ -135,8 +179,10 @@ Minecraft Applet 可视化配置管理工具
                 </div>
             </div>
 
+            <!-- 底部操作按钮组（已添加删除按钮） -->
             <div class="btn-group">
                 <button type="button" class="btn-action btn-add" onclick="addOrUpdateVersion()">写入 / 保存版本</button>
+                <button type="button" class="btn-action btn-delete" onclick="deleteCurrentVersion()">删除当前版本</button>
                 <button type="button" class="btn-action btn-clear" onclick="resetForm()">重置表单</button>
             </div>
         </div>
