@@ -1,0 +1,94 @@
+name: Package and Release
+
+on:
+  push:
+    branches:
+      - dev
+      - main  # 监听 main 分支的推送（仅用于打包，不触发 Release）
+    tags:
+      - '[0-9]*'  # 🌟 监听以数字开头的版本标签，如 2.2, 2.2.0
+
+jobs:
+  build-and-package:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # 赋予创建 Draft Release 和上传资产的写入权限
+
+    steps:
+      # 1. 拉取代码（fetch-depth: 0 是为了获取完整历史，以便进行分支安全校验）
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # 2. 安全校验：确保 Release 的 Tag 必须建立在 main 分支上
+      - name: Verify Tag is on main branch
+        if: startsWith(github.ref, 'refs/tags/') # 🌟 只要是 Tag 触发就进行分支校验
+        run: |
+          # 获取远程最新的 main 分支
+          git fetch origin main
+          # 校验：当前 Tag 所在的 Commit 是否存在于 main 分支的提交历史中
+          if git merge-base --is-ancestor HEAD origin/main; then
+            echo "✅ 安全校验通过：当前 Tag 确实在 main 分支上！"
+          else
+            echo "❌ 安全校验失败：发布的版本 Tag 必须基于 main 分支创建和推送！"
+            exit 1
+          fi
+
+      # 3. 智能解析版本号、生成包名与 Artifact 容器名
+      - name: Set Version and Package Name
+        run: |
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            # 如果是 Tag 触发 (例如 refs/tags/2.2)
+            # 🌟 因为你的 Tag 本身不带 'v'，直接截取 refs/tags/ 后面的字符即可
+            VERSION=${GITHUB_REF#refs/tags/}
+            ZIP_NAME="MinecraftAppletHTML.Web.${VERSION}.zip"
+            echo "IS_RELEASE=true" >> $GITHUB_ENV
+          else
+            # 如果是普通的 push (dev 或 main 分支) -> 🌟 干净纯净，不带任何版本号
+            ZIP_NAME="MinecraftAppletHTML.Web.Dev.zip"
+            echo "IS_RELEASE=false" >> $GITHUB_ENV
+          fi
+          
+          # 优雅处理：去除 .zip 后缀作为 Artifact 容器名，防止用户从 Actions 下载时出现 .zip.zip 双重压缩包
+          ARTIFACT_NAME=${ZIP_NAME%.zip}
+          
+          echo "ZIP_NAME=$ZIP_NAME" >> $GITHUB_ENV
+          echo "ARTIFACT_NAME=$ARTIFACT_NAME" >> $GITHUB_ENV
+          echo "🚀 解析出版本号: ${VERSION:-dev/main (无版本号)}"
+          echo "📦 最终打包文件名: $ZIP_NAME"
+          echo "📁 Artifact 容器名称: $ARTIFACT_NAME"
+
+      # 4. 执行打包 (过滤敏感和本地测试文件，保证版权合规)
+      - name: Zip Files
+        run: |
+          zip -r ${{ env.ZIP_NAME }} . \
+            -x "*.git*" \
+            -x "*.github*" \
+            -x "*.jar" \
+            -x "*.zip" \
+            -x "node_modules/*" \
+            -x "temp/*"
+
+      # 5. 保存打包产物到 GitHub Actions Artifacts (保留 14 天)
+      # dev/main 分支上传的将是纯净不带版本号的 MinecraftAppletHTML.Web.zip
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.ARTIFACT_NAME }}
+          path: ${{ env.ZIP_NAME }}
+          retention-days: 14
+
+      # 6. 【仅限 Release Tag】自动创建【Release 草稿】并上传带版本号的 zip
+      - name: Create GitHub Release Draft
+        if: env.IS_RELEASE == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ env.ZIP_NAME }}
+          tag_name: ${{ github.ref_name }}
+          name: MCAHTML ${{ github.ref_name }} 正式版发布
+          draft: true  # 🔒 保存为草稿，不直接公开发布
+          prerelease: false
+          generate_release_notes: true # 自动在草稿中根据 commit 历史生成变更日志
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
