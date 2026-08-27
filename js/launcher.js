@@ -95,7 +95,7 @@ function renderSyncApplet() {
         html += 'width="' + width + '" ';
         html += 'height="' + height + '" ';
         html += 'code="org.lwjgl.util.applet.AppletLoader" ';
-        html += 'archive="LWJGL/lwjgl_util_applet.jar, LWJGL/lzma.jar" ';
+        html += 'archive="LWJGL/lwjgl_util_applet.jar" ';
         html += 'codebase="." ';
         html += 'al_title="' + title + '" ';
         html += 'al_main="' + mainClass + '" ';
