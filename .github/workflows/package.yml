@@ -40,7 +40,7 @@ jobs:
         run: |
           if [[ $GITHUB_REF == refs/tags/* ]]; then
             # 如果是 Tag 触发 (例如 refs/tags/2.2)
-            # 🌟 因为你的 Tag 本身不带 'v'，直接截取 refs/tags/ 后面的字符即可
+            # 🌟 因为 Tag 本身不带 'v'，直接截取 refs/tags/ 后面的字符即可
             VERSION=${GITHUB_REF#refs/tags/}
             ZIP_NAME="MinecraftAppletHTML.Web.${VERSION}.zip"
             echo "IS_RELEASE=true" >> $GITHUB_ENV
@@ -71,8 +71,9 @@ jobs:
             -x "temp/*"
 
       # 5. 保存打包产物到 GitHub Actions Artifacts (保留 14 天)
-      # dev/main 分支上传的将是纯净不带版本号的 MinecraftAppletHTML.Web.zip
+      # 仅限 dev 分支推送时上传纯净不带版本号的测试包；main 分支推送不再上传 Artifacts
       - name: Upload Artifact
+        if: github.ref == 'refs/heads/dev'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.ARTIFACT_NAME }}
@@ -86,7 +87,7 @@ jobs:
         with:
           files: ${{ env.ZIP_NAME }}
           tag_name: ${{ github.ref_name }}
-          name: MCAHTML ${{ github.ref_name }} 正式版发布
+          name: MCAHTML v${{ github.ref_name }} 离线正式版
           draft: true  # 🔒 保存为草稿，不直接公开发布
           prerelease: false
           generate_release_notes: true # 自动在草稿中根据 commit 历史生成变更日志
