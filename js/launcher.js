@@ -95,7 +95,7 @@ function renderSyncApplet() {
         html += 'width="' + width + '" ';
         html += 'height="' + height + '" ';
         html += 'code="org.lwjgl.util.applet.AppletLoader" ';
-        html += 'archive="LWJGL/lwjgl_util_applet.jar, LWJGL/lzma.jar" ';
+        html += 'archive="LWJGL/lwjgl_util_applet.jar" ';
         html += 'codebase="." ';
         html += 'al_title="' + title + '" ';
         html += 'al_main="' + mainClass + '" ';
@@ -108,7 +108,7 @@ function renderSyncApplet() {
         html += 'al_mac="LWJGL/macosx_natives.jar" ';
         html += 'al_solaris="LWJGL/solaris_natives.jar" ';
         html += 'al_debug="false" ';
-        html += 'al_version="2.1" ';
+        html += 'al_version="2.11" ';
         html += 'separate_jvm="false" ';
         html += 'fix_arguments="-Dhttp.proxyHost=betacraft.uk -Dhttp.proxyPort=11702 -Dhttp.nonProxyHosts=api.betacraft.uk|files.betacraft.uk -Dsun.java2d.noddraw=true -Dsun.awt.noerasebackground=true -Dsun.java2d.d3d=false -Dsun.java2d.opengl=false -Dsun.java2d.pmoffscreen=false -Djava.net.useSystemProxies=false" ';
         html += 'java_arguments="-Xmx800M -XX:MaxDirectMemorySize=1024M -Djava.util.Arrays.useLegacyMergeSort=true -Dsun.java2d.uiScale.enabled=false -Dsun.java2d.dpiaware=false -Dorg.lwjgl.util.NoChecks=true" ';

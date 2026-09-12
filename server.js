@@ -68,7 +68,8 @@ const server = http.createServer((req, res) => {
     }
 
     // 静态文件托管
-    let filePath = path.join(__dirname, req.url === '/' ? 'Minecraft.html' : req.url.split('?')[0]);
+    const pathname = req.url.split('?')[0];
+    let filePath = path.join(__dirname, pathname === '/' ? 'Minecraft.html' : pathname);
     const ext = path.extname(filePath).toLowerCase();
     const contentType = MIME_TYPES[ext] || 'application/octet-stream';
 
@@ -82,8 +83,14 @@ const server = http.createServer((req, res) => {
                 res.end(`Server Error: ${err.code}`);
             }
         } else {
-            res.writeHead(200, { 'Content-Type': contentType });
-            res.end(content, 'utf-8');
+            // 显式声明 Content-Length：LWJGL AppletLoader 会用 HEAD 请求探测 jar 大小，
+            // 若缺失该头，Java 的 getContentLength() 返回 -1，会导致 totalDownloadSize=0 进而除零崩溃。
+            res.writeHead(200, { 'Content-Type': contentType, 'Content-Length': content.length });
+            if (req.method === 'HEAD') {
+                res.end();
+            } else {
+                res.end(content, 'utf-8');
+            }
         }
     });
 });
