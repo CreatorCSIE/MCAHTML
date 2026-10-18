@@ -99,6 +99,20 @@
 
 ---
 
+## 🌙 Nightly 测试版直接下载 (Nightly Builds via nightly.link)
+
+无需登录 GitHub、无需进入 Actions 页面，即可通过 [nightly.link](https://nightly.link) 直接下载 **dev 分支最新测试打包**：
+
+- **产物列表页**：[https://nightly.link/CreatorCSIE/MCAHTML/workflows/Package%20and%20Release/dev](https://nightly.link/CreatorCSIE/MCAHTML/workflows/Package%20and%20Release/dev)
+- **直链下载**：[MinecraftAppletHTML.Web.Dev.zip](https://nightly.link/CreatorCSIE/MCAHTML/workflows/Package%20and%20Release/dev/MinecraftAppletHTML.Web.Dev.zip)
+
+> **注意事项**：
+> 1. nightly.link 始终指向 dev 分支**最近一次成功** CI 运行的产物；Artifacts 保留期为 14 天，若 dev 分支超过 14 天无更新，链接将暂时失效，直到下一次 dev 推送。
+> 2. GitHub Actions 会将产物自动压缩，因此下载得到的 zip 内部**还有一层** `MinecraftAppletHTML.Web.Dev.zip`，请**解压两次**后使用。
+> 3. Nightly 为开发测试版本，可能包含未稳定功能；正式使用请前往 [Releases 页面](https://github.com/CreatorCSIE/MCAHTML/releases) 下载正式版。
+
+---
+
 ## 🌐 Localization / 国际化与多语言支持
 
 本项目（包含启动器页面与文档）随时欢迎社区提供多语言本地化（i18n）与翻译支持！  
