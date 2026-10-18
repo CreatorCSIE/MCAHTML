@@ -70,17 +70,26 @@ jobs:
             -x "node_modules/*" \
             -x "temp/*"
 
-      # 5. 保存打包产物到 GitHub Actions Artifacts (保留 14 天)
+      # 5. 将 zip 解开为纯净目录，供 Artifact 上传
+      # Actions 会自动把上传内容再压一层 zip，若直接上传 zip 文件会形成"双重打包"；
+      # 改为上传解压后的目录内容，用户下载后只需解压一次
+      - name: Prepare Unpacked Folder
+        if: github.ref == 'refs/heads/dev'
+        run: |
+          mkdir -p unpacked
+          unzip -q ${{ env.ZIP_NAME }} -d unpacked
+
+      # 6. 保存打包产物到 GitHub Actions Artifacts (保留 14 天)
       # 仅限 dev 分支推送时上传纯净不带版本号的测试包；main 分支推送不再上传 Artifacts
       - name: Upload Artifact
         if: github.ref == 'refs/heads/dev'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.ARTIFACT_NAME }}
-          path: ${{ env.ZIP_NAME }}
+          path: unpacked/
           retention-days: 14
 
-      # 6. 【仅限 Release Tag】自动创建【Release 草稿】并上传带版本号的 zip
+      # 7. 【仅限 Release Tag】自动创建【Release 草稿】并上传带版本号的 zip
       - name: Create GitHub Release Draft
         if: env.IS_RELEASE == 'true'
         uses: softprops/action-gh-release@v2
