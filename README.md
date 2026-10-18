@@ -103,8 +103,8 @@
 
 无需登录 GitHub、无需进入 Actions 页面，即可通过 [nightly.link](https://nightly.link) 直接下载 **dev 分支最新测试打包**：
 
-- **产物列表页**：[https://nightly.link/CreatorCSIE/MCAHTML/workflows/Package%20and%20Release/dev](https://nightly.link/CreatorCSIE/MCAHTML/workflows/Package%20and%20Release/dev)
-- **直链下载**：[MinecraftAppletHTML.Web.Dev.zip](https://nightly.link/CreatorCSIE/MCAHTML/workflows/Package%20and%20Release/dev/MinecraftAppletHTML.Web.Dev.zip)
+- **产物列表页**：[https://nightly.link/CreatorCSIE/MCAHTML/workflows/package/dev](https://nightly.link/CreatorCSIE/MCAHTML/workflows/package/dev)
+- **直链下载**：[MinecraftAppletHTML.Web.Dev.zip](https://nightly.link/CreatorCSIE/MCAHTML/workflows/package/dev/MinecraftAppletHTML.Web.Dev.zip)
 
 > **注意事项**：
 > 1. nightly.link 始终指向 dev 分支**最近一次成功** CI 运行的产物；Artifacts 保留期为 14 天，若 dev 分支超过 14 天无更新，链接将暂时失效，直到下一次 dev 推送。
